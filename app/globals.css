@@ -653,3 +653,82 @@ p { margin: 0 0 1em; color: var(--ink-soft); }
   transition: opacity 0.5s ease;
 }
 .img-fade.is-loaded { opacity: 1; }
+
+/* ===== Splash / brand intro =====
+   First-paint overlay in the same calm sage/cream tone as the site.
+   Auto-fades out once the page is loaded; dismounts after the transition.
+*/
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+  /* Respect notches in webviews */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.splash--hiding { opacity: 0; pointer-events: none; }
+
+.splash__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  transform: translateY(-2vh);
+  animation: splash-in 0.75s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes splash-in {
+  from { opacity: 0; transform: translateY(-2vh) scale(0.94); }
+  to   { opacity: 1; transform: translateY(-2vh) scale(1); }
+}
+
+.splash__logo {
+  width: 88px;
+  height: 88px;
+  /* Soft, slow breath to feel calm and alive */
+  animation: splash-breath 2.6s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes splash-breath {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.04); opacity: 0.82; }
+}
+
+.splash__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.splash__b1 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 350;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.splash__b2 {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  /* compensate for the trailing letter-spacing so the text sits visually centered */
+  padding-left: 0.5em;
+}
+
+@media (max-width: 480px) {
+  .splash__logo { width: 72px; height: 72px; }
+  .splash__b1 { font-size: 1.65rem; }
+  .splash__b2 { font-size: 0.62rem; letter-spacing: 0.42em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash__inner { animation: none; transform: none; }
+  .splash__logo { animation: none; }
+  .splash { transition: opacity 0.2s ease; }
+}
